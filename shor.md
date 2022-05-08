@@ -196,7 +196,9 @@ g(\theta) = \left|\frac{1-e^{im\theta}}{1-e^{i\theta}}\right|^2 = \frac{\sin^2\f
 \\
 P(\ket{y_i,z}) \ge \frac{1}{Q^2} \left|\frac{1-(\omega_Q^\frac{r}{2})^m}{1-\omega_Q^\frac{r}{2}}\right|^2 = \frac{1}{Q^2} \frac{\sin^2(\frac{\pi}{2})}{\sin^2(\frac{r\pi}{2Q})} = \frac{1}{Q^2\sin^2(\frac{r\pi}{2Q})}=\frac{4}{\pi^2 r^2}\\
 $$
-有 $r$ 个 $y$ 和 $r$ 个 $z$ ，因此这一步的总成功率 $>\frac{4}{\pi^2} \approx 0.4$ ，实际计算机模拟成功率 $>0.7$ 
+
+
+有 $r$ 个 $y$ 和 $r$ 个 $z$ ，因此这一步的总成功率 $>\frac{4}{\pi^2} \approx 0.4$ （最坏情况下是 $\frac{4}{\pi^2}$ ，但不可能一直是最坏情况）
 
 
 
