@@ -56,7 +56,7 @@ def period_finding(a, mod) :
     while True :
         c = random.choices([i for i in range(len(P))], weights=P)[0]
         # c/q = d/r
-        f = Fraction(c/n).limit_denominator(mod)
+        f = Fraction(c,n).limit_denominator(mod) # stern brocot tree
         r = f.denominator
         print('        ', c/n, f)
 
@@ -119,8 +119,9 @@ def shor_test(N) :
     print('END   FOUND', [d, N//d], end='\n\n')
 
 
-for i in range(1000,1100) :
-    if i%2 == 0 : continue
-    # if isprime(i) : continue
+if __name__ == '__main__' :
+    for i in range(1000,1100) :
+        if i%2 == 0 : continue
+        # if isprime(i) : continue
 
-    shor_test(i)
+        shor_test(i)

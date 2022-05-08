@@ -1,16 +1,17 @@
 ## DFT matrix 
 
 $$
-Q = \frac{1}{\sqrt n}
+U = \frac{1}{\sqrt n}
 \left(\begin{array}\\
-\omega_n^{0\times0} & \omega_n^{0\times1} & \dots & \omega_n^{0\times (n-1)}\\
-\omega_n^{1\times0} & \omega_n^{1\times1} & \dots & \omega_n^{1\times (n-1)}\\
+\omega_n^{-0\times0} & \omega_n^{-0\times1} & \dots & \omega_n^{-0\times (n-1)}\\
+\omega_n^{-1\times0} & \omega_n^{-1\times1} & \dots & \omega_n^{-1\times (n-1)}\\
 \vdots & \vdots & \ddots & \vdots\\
-\omega_n^{(n-1)\times0} & \omega_n^{(n-1)\times1} & \dots & \omega_n^{(n-1)\times (n-1)}\\
+\omega_n^{-(n-1)\times0} & \omega_n^{-(n-1)\times1} & \dots & \omega_n^{(n-1)\times -(n-1)}\\
 \end{array}\right)\\
 \\
-Q \text{ is unitary}
+U \text{ is unitary}
 $$
+
 
 $$
 \\
@@ -40,16 +41,18 @@ b_j &= C\sum_{k=0}^{Q-1} \omega_Q^{-jk} v_k\\
 \\
 |b_j|^2 &= C^2\left|\sum_{i=0}^{Q/r} (\omega_Q^{-jr})^i\right|^2\\
 \omega &= \omega_Q^{-jr}\\
-|b_j|^2 &= C^2\left|\frac{1-\omega^{Q/r+1}}{1-\omega}\right|^2
+|b_j|^2 &= C^2\left|\frac{1-\omega^{Q/r+1}}{1-\omega}\right|^2\\
 \\
+\exists j_1,j_2,\dots j_{Q/r},\quad &j_i r\ \mathrm{mod}\ Q < \frac{r}{2}\\
+\alpha &= \sum |b_{j_i}|^2
 \end{aligned}
 $$
 
-​	
+当 $r \mid Q$ 时，$\alpha=1$ ，其他时候观察发现 $\alpha > 0.773$
 
 
 
-DFT后，在 $t$ 的倍数位置幅值较高
+
 
 根据数论知识，只需要坍缩到 $r$ 的倍数即可
 

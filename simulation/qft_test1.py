@@ -5,8 +5,6 @@ from fractions import Fraction
 import random
 import matplotlib.pyplot as plt
 
-# w = [np.exp(2j*np.pi * i/n) for i in range(n)]
-
 def calc(Q, r) :
     def f(theta) :
         w = np.exp(theta*1j)

@@ -1,4 +1,4 @@
-## Shor's algorithm
+## Shor's 算法
 
 通过以下的Shor算法，能找到 $N$ 的一个非平凡因子：
 
@@ -16,7 +16,7 @@
 
 ## Classical part
 
-### not-trivial square root of 1 （1的非平凡平方根）
+### not-trivial square root of 1 （模N意义下1的非平凡平方根）
 
 #### 在分解中的作用
 
@@ -126,13 +126,112 @@ P(f_2(r_i) = t) &= \begin{cases}
 \frac{1}{2^{f_2(\varphi(n))-t+1}} & 1\le t\le f_2(\varphi(n))
 \end{cases}\\
 \\
-P(2\nmid r \or a^{\frac{r}{2}} \equiv -1 \pmod N) &= \sum_t \prod_i P(f_2(r_i) = t) \le \frac{1}{2}
+P(\text{fail}) &= P(2\nmid r \or a^{\frac{r}{2}} \equiv -1\!\! \pmod N) = \sum_t \prod_i P(f_2(r_i) = t) \le \frac{1}{2}
 \end{aligned}
 $$
+
+## 前置知识：DFT与QFT、Quantum Phase Estimation
+
+$$
+U_{\mathrm{QFT}} = \frac{1}{\sqrt n}
+\left(\begin{array}\\
+\omega_n^{-0\times0} & \omega_n^{-0\times1} & \dots & \omega_n^{-0\times (n-1)}\\
+\omega_n^{-1\times0} & \omega_n^{-1\times1} & \dots & \omega_n^{-1\times (n-1)}\\
+\vdots & \vdots & \ddots & \vdots\\
+\omega_n^{-(n-1)\times0} & \omega_n^{-(n-1)\times1} & \dots & \omega_n^{(n-1)\times -(n-1)}\\
+\end{array}\right)\\
+\\
+U_{\mathrm{QFT}} \text{ is unitary}
+$$
+
+
+
+
+
+
+
+## 量子周期查找程序
+
+### 完整量子电路概述
+
+https://en.wikipedia.org/wiki/File:Shor%27s_algorithm.svg
+
+$Q = 2^q,\ N^2\le Q<2N^2$
+
+$f(x) = a^x \ \mathrm{mod}\ N$
+
+
+
+### QFT部分
+
+#### QFT
+
+经过乘法电路之后，量子态可以表示为：$\ket{\psi} = \frac{1}{\sqrt{Q}} \sum_{x=0}^{Q-1} \ket{x, f(x)}$
+
+对前 $q$ 个 qubit 进行 QFT，$U_{\mathrm{QFT}}(\ket{\psi}) = \frac{1}{Q} \sum_{x=0}^{Q-1} \sum_{y=0}^{Q-1} \omega_Q^{xy} \ket{y,f(x)}$
+
+
+
+只考虑 $f(x)=z$ 的情况，若 $r = \mathrm{ord}_N(a)$ ，$f(x)=z \iff x=x_0+kr$
+$$
+\begin{aligned}
+\ket{\psi} &= \frac{1}{\sqrt Q} \sum_{z=0}^{N-1} \sum_{x=0}^{Q-1} [f(x)=z] \ket{x,z}\\
+&= \frac{1}{\sqrt Q} \sum_{z=0}^{N-1} \sum_{k} \ket{x_0+kr,z}\\
+\\
+U_{\mathrm{QFT}}(\ket{\psi}) &= \frac{1}{Q} \sum_{z=0}^{N-1} \sum_{y=0}^{Q-1} \sum_{k} \omega_Q^{(x_0+kr)y} \ket{y,z}\\
+\\
+P(\ket{y,z}) &= \left|\frac{1}{Q} \sum_{k} \omega_Q^{(x_0+kr)y}\right|^2\\
+&= \frac{1}{Q^2} \left|\sum_{k=0}^{Q/r \text{ or } Q/r-1} (\omega_Q^{ry})^k\right|^2\\
+&= \frac{1}{Q^2} \left|\frac{1-\omega^m}{1-\omega}\right|^2\\
+\\
+&\qquad \omega = w_Q^{ry},\ m = Q/r \text{ or } Q/r+1
+\end{aligned}\\
+$$
+
+$$
+\exists y_1<y_2<\dots<y_{Q/r},\quad ry_i\ \mathrm{mod}\ Q \in [-\frac{r}{2}, \frac{r}{2}]\\
+ry_i - Qi \in [-\frac{r}{2}, \frac{r}{2}]\\
+\\
+g(\theta) = \left|\frac{1-e^{im\theta}}{1-e^{i\theta}}\right|^2 = \frac{\sin^2\frac{m\theta}{2}}{\sin^2\frac{\theta}{2}}\\
+\\
+P(\ket{y_i,z}) \ge \frac{1}{Q^2} \left|\frac{1-(\omega_Q^\frac{r}{2})^m}{1-\omega_Q^\frac{r}{2}}\right|^2 = \frac{1}{Q^2} \frac{\sin^2(\frac{\pi}{2})}{\sin^2(\frac{r\pi}{2Q})} = \frac{1}{Q^2\sin^2(\frac{r\pi}{2Q})}=\frac{4}{\pi^2 r^2}\\
+$$
+有 $r$ 个 $y$ 和 $r$ 个 $z$ ，因此这一步的总成功率 $>\frac{4}{\pi^2} \approx 0.4$ ，实际计算机模拟成功率 $>0.7$ 
+
+
+
+#### 推算周期
+
+假设现在测量到了一组 $\ket{y,z}$ ，我们可以假设 $\exists d \in 0\dots r-1,\ |ry-Qd|\le\frac{r}{2}$ （这个假设正确的概率 $>0.4$），现在我们需要通过 $y$ 推算出 $r$
+
+同除 $Qr$，$|\frac{y}{Q}-\frac{d}{r}| \le \frac{1}{2Q}$ ，其中 $\frac{y}{Q}$ 已知，$\frac{d}{r}$ 是一个分子分母均小于 $N$ 的分数
+
+
+
+对于两个分子分母均小于 $N$ 的不同的分数 $\left|\frac{a}{b} - \frac{c}{d}\right| = \left|\frac{ad-bc}{bd} \right| \ge \frac{1}{bd} \ge \frac{1}{N^2} > \frac{1}{Q}$ ，因此，通过 $\frac{y}{Q}$ 可以唯一确定 $\frac{d}{r}$ （可以用 stern brocot tree 或者 连分数求解）
+
+但是，确定了 $\frac{d}{r}$ 不能唯一确定 $r$ ，因为 $d,r$ 有可能不互质，在这种情况下只能重新计算
+
+
+
+$d \in 0\dots r-1$ ，而计算到每一个 $d$ 的概率大于 $0.4 \frac{1}{r}$ ，其中与 $r$ 互质的 $d$ 的数量是 $\varphi(r)$
+
+这部分的成功率是 $\frac{\varphi(r)}{r}$
+
+
+
+### 取模乘法部分
+
 
 
 ## 参考
 
+Shor, P.W. "Algorithms for quantum computation: discrete logarithms and factoring"
+
+Stephane Beauregard "Circuit for Shor's algorithm using 2n+3 qubits"
+
+Eric R. Johnston, Nic Harrigan, Mercedes Gimeno-Segovia "Programming Quantum Computers_ Essential Algorithms and Code Samples"
+
 [Shor's algorithm - Wikipedia](https://en.wikipedia.org/wiki/Shor's_algorithm)
 
-[Multiplicative group of integers modulo n - Wikipedia](https://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n)
+[Shor's Algorithm - Qiskit](https://qiskit.org/textbook/ch-algorithms/shor.html)
