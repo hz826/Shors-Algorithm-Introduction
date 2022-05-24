@@ -6,7 +6,11 @@ from scipy.fft import fft
 from fractions import Fraction
 import matplotlib.pyplot as plt
 
-def qft_simu_standard(a, mod, n) :
+def qft_simu_standard(a, mod, n=None) :
+    if n == None :
+        n = 1
+        while n < mod**2 : n <<= 1
+
     A = [[] for i in range(mod)]
     for i in range(n) :
         A[qpow(a, i, mod)].append(i)
@@ -24,7 +28,11 @@ def qft_simu_standard(a, mod, n) :
         P += abs(B) ** 2
     return P
 
-def qft_simu_fast(a, mod, n) :
+def qft_simu_fast(a, mod, n=None) :
+    if n == None :
+        n = 1
+        while n < mod**2 : n <<= 1
+    
     r = ord(a, mod)
     P = np.zeros(n)
     # n == (n%r) * (n//r+1) + (r-n%r) * (n//r)
@@ -41,7 +49,7 @@ def qft_simu_fast(a, mod, n) :
         B[i*r] += 1/n
     B = fft(B)
     P += (r-n%r) * (abs(B)**2)
-
+    
     return P
 
 def qft_simu(*args) :
@@ -51,7 +59,8 @@ def qft_simu(*args) :
 def period_finding(a, mod) :
     n = 1
     while n < mod**2 : n <<= 1
-    P = qft_simu(a, mod, n)
+
+    P = qft_simu(a, mod)
 
     while True :
         c = random.choices([i for i in range(len(P))], weights=P)[0]
@@ -120,8 +129,13 @@ def shor_test(N) :
 
 
 if __name__ == '__main__' :
-    for i in range(1000,1100) :
-        if i%2 == 0 : continue
-        # if isprime(i) : continue
+    P = qft_simu(3, 7)
+    plt.bar([i for i in range(len(P))], P)
+    plt.show()
 
-        shor_test(i)
+# if __name__ == '__main__' :
+#     for i in range(1000,1100) :
+#         if i%2 == 0 : continue
+#         # if isprime(i) : continue
+
+#         shor_test(i)

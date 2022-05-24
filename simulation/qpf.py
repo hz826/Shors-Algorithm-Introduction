@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 def plot(result) :
     result = [(k,v) for (k,v) in result.items()]
     result.sort(key = lambda x:x[1], reverse = True)
-    # print(result)
+    print(result)
     result_type = [int(i[0],2) for i in result]
     result_frequency = [i[1] for i in result]
     plt.bar(result_type, result_frequency, align = 'center')
@@ -18,7 +18,7 @@ def plot(result) :
 def CCR(c1: Qubit, c2: Qubit, tar: Qubit, theta: float) -> QCircuit :
     circ = QCircuit()
     circ << CR(c1, tar, theta/2) << CR(c2, tar, theta/2)
-    circ << CNOT(c1, c2) << CR(c2, -theta/2) << CNOT(c1, c2)
+    circ << CNOT(c1, c2) << CR(c2, tar, -theta/2) << CNOT(c1, c2)
     return circ
 
 def CSWAP(c: Qubit, x: Qubit, y: Qubit) -> QCircuit :
@@ -124,29 +124,36 @@ def MULT(
     circ = QCircuit()
 
     circ << MULT_ADD(x, y, mod_ancilla, a, N, c)
-    for i in range(q) : circ << CSWAP(c, x[i], y[i])
+    for i in range(q) : circ << (CSWAP(c, x[i], y[i]) if c != None else SWAP(x[i], y[i]))
     circ << MULT_ADD(x, y, mod_ancilla, b, N, c)
 
     return circ
 
+def QPF(a: int, N: int) -> int :
+    qvm = init_quantum_machine(QMachineType.CPU)
 
-if __name__ == "__main__":
-    machine = init_quantum_machine(QMachineType.CPU)
+    q = 1
+    while 2**q < N : q += 1
 
-    q = 3
-    # work = machine.qAlloc_many(n*2)
-    mult = machine.qAlloc_many(q)
-    mult_ancilla = machine.qAlloc_many(q)
-    mod_ancilla = machine.qAlloc_many(2)
+    work = qvm.qAlloc_many(q*2)
+    mult = qvm.qAlloc_many(q)
+    mult_ancilla = qvm.qAlloc_many(q)
+    mod_ancilla = qvm.qAlloc_many(2)
 
     prog = QProg()
-    prog << X(mult[0])
-    prog << MULT(mult, mult_ancilla, mod_ancilla, 5, 7)
-    # prog << MOD_ADD(mult, mod_ancilla, 4, 7)
+    prog << X(mult[0]) << H(work)
 
-    result = prob_run_dict(prog, mult, -1)
+    aa = a
+    for i in range(q) :
+        prog << MULT(mult, mult_ancilla, mod_ancilla, aa, N, work[i])
+        aa = aa ** 2 % N
 
-    print(result)
-    # plot(result)
+    prog << QFT(work).dagger()
 
-    # destroy_quantum_machine(machine)
+    result = prob_run_dict(prog, work, -1)
+    plot(result)
+
+    destroy_quantum_machine(qvm)
+
+if __name__ == "__main__":
+    QPF(4, 7)
