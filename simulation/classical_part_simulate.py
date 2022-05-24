@@ -23,7 +23,7 @@ def shor_simulate(n) :
     print('Success rate =', success / (n-1))
 
 shor_simulate(11*37)
-shor_simulate(19*23)
+# shor_simulate(19*23)
 '''
 r : ERROR, r%2 == 1
 b : ERROR, b=a^(r/2) == n-1

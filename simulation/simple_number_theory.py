@@ -18,6 +18,10 @@ def exgcd(a, b) :
     (y,x,g) = exgcd(b,a%b)
     return (x,y-x*(a//b),g)
 
+def inv(a, m) :
+    (x,y,g) = exgcd(a,m)
+    return (x%m + m) % m
+
 def isprime(n) :
     if n <= 1 :
         return False

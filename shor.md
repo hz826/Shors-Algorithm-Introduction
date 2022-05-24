@@ -148,8 +148,6 @@ $$
 
 
 
-
-
 ## 量子周期查找程序
 
 ### 完整量子电路概述
@@ -159,6 +157,10 @@ https://en.wikipedia.org/wiki/File:Shor%27s_algorithm.svg
 $Q = 2^q,\ N^2\le Q<2N^2$
 
 $f(x) = a^x \ \mathrm{mod}\ N$
+
+
+
+$\frac{1}{\sqrt{2^Q}}\sum_{x=0}^{2^Q-1} \ket{x,1}$
 
 
 
@@ -237,3 +239,5 @@ Eric R. Johnston, Nic Harrigan, Mercedes Gimeno-Segovia "Programming Quantum Com
 [Shor's algorithm - Wikipedia](https://en.wikipedia.org/wiki/Shor's_algorithm)
 
 [Shor's Algorithm - Qiskit](https://qiskit.org/textbook/ch-algorithms/shor.html)
+
+[Q# 中的量子算法 - Azure Quantum | Microsoft Docs](https://docs.microsoft.com/zh-cn/azure/quantum/user-guide/libraries/standard/algorithms)

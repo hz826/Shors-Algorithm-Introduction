@@ -58,7 +58,7 @@ def period_finding(a, mod) :
         # c/q = d/r
         f = Fraction(c,n).limit_denominator(mod) # stern brocot tree
         r = f.denominator
-        print('        ', c/n, f)
+        print('        ', Fraction(c,n), f)
 
         if qpow(a, r, mod) == 1 :
             while r%2 == 0 and qpow(a, r//2, mod) == 1 :
