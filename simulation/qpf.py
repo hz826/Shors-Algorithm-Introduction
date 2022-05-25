@@ -92,7 +92,7 @@ def MOD_ADD(
 
     return circ
 
-def MULT_ADD(
+def CMULT(
         x: QVec, y: QVec, mod_ancilla: QVec,
         a: int, N: int,
         c: Qubit or None = None,
@@ -110,7 +110,7 @@ def MULT_ADD(
 
     return circ
 
-def MULT(
+def U(
         x: QVec, y: QVec, mod_ancilla: QVec,
         a: int, N: int,
         c: Qubit or None = None,
@@ -123,9 +123,9 @@ def MULT(
     q = len(x)
     circ = QCircuit()
 
-    circ << MULT_ADD(x, y, mod_ancilla, a, N, c)
+    circ << CMULT(x, y, mod_ancilla, a, N, c)
     for i in range(q) : circ << (CSWAP(c, x[i], y[i]) if c != None else SWAP(x[i], y[i]))
-    circ << MULT_ADD(x, y, mod_ancilla, b, N, c)
+    circ << CMULT(x, y, mod_ancilla, b, N, c)
 
     return circ
 
@@ -141,11 +141,12 @@ def QPF(a: int, N: int) -> int :
     mod_ancilla = qvm.qAlloc_many(2)
 
     prog = QProg()
-    prog << X(mult[0]) << H(work)
+    prog << X(mult[0])
+    prog << H(work)
 
     aa = a
-    for i in range(q) :
-        prog << MULT(mult, mult_ancilla, mod_ancilla, aa, N, work[i])
+    for i in range(len(work)) :
+        prog << U(mult, mult_ancilla, mod_ancilla, aa, N, work[i])
         aa = aa ** 2 % N
 
     prog << QFT(work).dagger()
@@ -156,4 +157,4 @@ def QPF(a: int, N: int) -> int :
     destroy_quantum_machine(qvm)
 
 if __name__ == "__main__":
-    QPF(4, 7)
+    QPF(3,7)
