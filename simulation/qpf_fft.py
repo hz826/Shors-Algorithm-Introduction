@@ -4,49 +4,50 @@ import numpy as np
 
 # 使用 fft 模拟量子计算机，返回测量得到每一个数的概率
 
-def qpf_fft_slow(a, mod, n=None) :
-    if n == None :
-        n = 1
-        while n < mod**2 : n <<= 1
+def qpf_fft_slow(a, N, Q=None) :
+    if Q == None :
+        Q = 1
+        while Q < N : Q <<= 1
+        Q = Q**2
 
-    A = [[] for i in range(mod)]
-    for i in range(n) :
-        A[qpow(a, i, mod)].append(i)
+    A = [[] for i in range(N)]
+    for i in range(Q) :
+        A[qpow(a, i, N)].append(i)
 
-    P = np.zeros(n)
+    P = np.zeros(Q)
 
-    for m in range(mod) :
+    for m in range(N) :
         if len(A[m]) == 0 :
             continue
 
-        B = np.zeros(n)
+        B = np.zeros(Q)
         for i in A[m] :
-            B[i] += 1/n
+            B[i] += 1/Q
         B = fft(B)
         P += abs(B) ** 2
     return P
 
 
-def qpf_fft_fast(a, mod, n=None) :
-    if n == None :
-        n = 1
-        while n < mod**2 : n <<= 1
+def qpf_fft_fast(a, N, Q=None) :
+    if Q == None :
+        Q = 1
+        while Q < N**2 : Q <<= 1
     
-    r = ord(a, mod)
-    P = np.zeros(n)
-    # n == (n%r) * (n//r+1) + (r-n%r) * (n//r)
+    r = ord(a, N)
+    P = np.zeros(Q)
+    # Q == (Q%r) * (Q//r+1) + (r-Q%r) * (Q//r)
 
-    if n%r > 0 :
-        B = np.zeros(n)
-        for i in range(n//r+1) :
-            B[i*r] += 1/n
+    if Q%r > 0 :
+        B = np.zeros(Q)
+        for i in range(Q//r+1) :
+            B[i*r] += 1/Q
         B = fft(B)
-        P += (n%r) * (abs(B)**2)
+        P += (Q%r) * (abs(B)**2)
     
-    B = np.zeros(n)
-    for i in range(n//r) :
-        B[i*r] += 1/n
+    B = np.zeros(Q)
+    for i in range(Q//r) :
+        B[i*r] += 1/Q
     B = fft(B)
-    P += (r-n%r) * (abs(B)**2)
+    P += (r-Q%r) * (abs(B)**2)
     
     return P
