@@ -1,4 +1,4 @@
-from qft_simulate import *
+from qpf import *
 
 def test(a, mod) :
     r = ord(a, mod)
