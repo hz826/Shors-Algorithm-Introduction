@@ -1,8 +1,13 @@
 from qpf import QPF
 from simple_number_theory import *
 import math
+import random
 from fractions import Fraction
 from qpf import QPF
+
+# 'qpf_fft_slow', 'qpf_fft_fast', 'qpf_qft_slow', 'qpf_qft_fast' 之一
+# 作用分别是：使用fft模拟、使用fft模拟化简后的表达式、使用 pyqpanda 模拟 4n+2 qubits、使用 pyqpanda 模拟 2n+3 qubits
+QPF_mode = 'qpf_fft_fast'
 
 def period_finding(a, N) :
     # 周期查找算法，需要使用量子计算机才具有优势
@@ -21,6 +26,8 @@ def period_finding(a, N) :
         # 可以证明 f 的分母是 r 或者 r 的约数，如果是 r 的约数则需要重新进行此步骤
 
         if qpow(a, r, N) == 1 :
+            while r%2 == 0 and qpow(a, r//2, N) == 1 : # 可以证明，只要找到 r 的倍数即可
+                r //= 2
             return r
 
 def shor(N) :
@@ -78,7 +85,16 @@ def shor_test(N) :
     
     print('END   FOUND', [d, N//d], end='\n\n')
 
+
 if __name__ == '__main__' :
-    for i in range(1000,1100) :
-        if i%2 == 0 : continue
-        shor_test(i)
+    QPF_mode = 'qpf_qft_fast'
+    for i in range(20) :
+        shor_test(899)
+
+    # QPF_mode = 'qpf_fft_fast'
+    # for i in range(20) :
+    #     shor_test(143)
+
+    # for i in range(1000,1100) :
+    #     if i%2 == 0 : continue
+    #     shor_test(i)

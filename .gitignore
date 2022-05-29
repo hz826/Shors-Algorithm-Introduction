@@ -1,4 +1,5 @@
 reference/
 ppt/
+manim/myscene/__pycache__/
 */__pycache__
 */media

@@ -153,60 +153,66 @@ def QPF_qft_slow_prob(a: int, N: int) :
         aa = aa ** 2 % N
 
     prog << QFT(work).dagger()
+    # QFT_dagger = QCircuit()
+    # for i in range(q) :
+    #     QFT_dagger << SWAP(work[i], work[2*q-i-1])
+    # for i in range(2*q) :
+    #     QFT_dagger << H(work[i])
+    #     for j in range(i+1,2*q) :
+    #         QFT_dagger << CR(work[i], work[j], np.pi / 2**(j-i)).dagger()
+    # prog << QFT_dagger
 
     result = prob_run_list(prog, work, -1)
     destroy_quantum_machine(qvm)
     return result
 
-# import matplotlib.pyplot as plt
-# if __name__ == '__main__' :
-#     result = QPF_qft_slow_prob(3, 7)
-#     plt.bar([i for i in range(len(result))], result)
-#     plt.show()
-    
+def QPF_qft_fast(a: int, N: int, times: int) : 
+    # 使用 2n+3 个量子比特的量子周期查找算法
+    qvm = init_quantum_machine(QMachineType.CPU)
 
-# def qpf_qft_fast(a: int, N: int) : 
-#     # 使用 2n+3 个量子比特的量子周期查找算法
-#     qvm = init_quantum_machine(QMachineType.CPU)
+    q = 1
+    while 2**q < N : q += 1
 
-#     q = 1
-#     while 2**q < N : q += 1
+    work = qvm.qAlloc()
+    mult = qvm.qAlloc_many(q)
+    mult_ancilla = qvm.qAlloc_many(q)
+    mod_ancilla = qvm.qAlloc_many(2)
+    cbits = qvm.cAlloc_many(q*2)
 
-#     work = qvm.qAlloc()
-#     mult = qvm.qAlloc_many(q)
-#     mult_ancilla = qvm.qAlloc_many(q)
-#     mod_ancilla = qvm.qAlloc_many(2)
+    prog = QProg()
+    prog << X(mult[0])
 
-#     prog = QProg()
-#     prog << X(mult[0])
+    A = [a]
+    for i in range(q*2-1) :
+        A.append(A[-1]**2 % N)
 
-#     aa = a
-#     for i in range(len(work)) :
-#         prog << U(mult, mult_ancilla, mod_ancilla, aa, N, work[i])
-#         aa = aa ** 2 % N
+    for i in range(q*2) :
+        prog << H(work)
+        prog << U(mult, mult_ancilla, mod_ancilla, A[-i], N, work)
+        
+        ### 这里是一个 QFT
+        for j in range(i) :
+            prog << QIfProg(cbits[j], U1(work, np.pi / 2**(i-j)).dagger()) # 改为使用传统比特控制旋转
+        prog << H(work)
+        ###
 
-#     prog << QFT(work).dagger()
+        prog << Measure(work, cbits[i])
+        prog << QIfProg(cbits[i], X(work)) # 置0
 
-#     result = prob_run_list(prog, work, -1)
-#     destroy_quantum_machine(qvm)
-#     return result
+    result = run_with_configuration(prog, cbits, times)
+    destroy_quantum_machine(qvm)
+    return result
 
-# import matplotlib.pyplot as plt
 
-# if __name__ == '__main__' :
-#     qvm = init_quantum_machine(QMachineType.CPU)
+import matplotlib.pyplot as plt
+if __name__ == '__main__' :
+    a = 2
+    N = 7
+    times = 2048
 
-#     qbit = qvm.qAlloc()
-#     cbit = qvm.cAlloc()
-#     cbit2 = qvm.cAlloc()
-
-#     prog = QProg()
-#     branch_true = QProg()
-    
-#     prog << H(qbit)
-#     prog << Measure(qbit, cbit)
-#     qif = QIfProg(cbit == 0, H(qbit))
-#     prog << qif
-
-#     result = qvm.prob_run_tuple_list(prog, qbit, -1)
-#     print(result)
+    result = QPF_qft_fast(a, N, times)
+    P = [0 for i in range(64)]
+    for (k,v) in result.items() :
+        P[int(k,2)] += v / times
+    plt.bar([i for i in range(len(P))], P)
+    plt.show()
