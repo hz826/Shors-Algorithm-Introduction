@@ -1,4 +1,3 @@
-from turtle import circle
 from manim import *
 import numpy as np
 from numpy import sin, cos
