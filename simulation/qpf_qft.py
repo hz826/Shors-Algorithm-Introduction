@@ -70,6 +70,7 @@ def MOD_ADD(
     # （受控）模 N 加法门，需要两个辅助位
     # |x>  -->  |x+a-N>      -->  |(x+a)%N>    -->  |(x+a)%N-a>  -->  |(x+a)%N>
     # |0>  -->  |[x+a-N<0]>  -->  |[x+a-N<0]>  -->  |0>          -->  |0>
+    # 为了减少 QFT 次数，在真实应用中使用的是 |φ(x)>  -->  |φ((x+a)%N)>
 
     a = (a % N + N) % N
     q = len(x)
@@ -130,8 +131,8 @@ def U(
 ##############################################################################################
 
 
-def qpf_qft_slow(a: int, N: int) : 
-    # 使用 2n + 2n+2 个量子比特的量子周期查找算法
+def QPF_qft_slow_prob(a: int, N: int) : 
+    # 使用 4n+2 个量子比特的量子周期查找算法，返回概率分布
     qvm = init_quantum_machine(QMachineType.CPU)
 
     q = 1
@@ -156,3 +157,56 @@ def qpf_qft_slow(a: int, N: int) :
     result = prob_run_list(prog, work, -1)
     destroy_quantum_machine(qvm)
     return result
+
+# import matplotlib.pyplot as plt
+# if __name__ == '__main__' :
+#     result = QPF_qft_slow_prob(3, 7)
+#     plt.bar([i for i in range(len(result))], result)
+#     plt.show()
+    
+
+# def qpf_qft_fast(a: int, N: int) : 
+#     # 使用 2n+3 个量子比特的量子周期查找算法
+#     qvm = init_quantum_machine(QMachineType.CPU)
+
+#     q = 1
+#     while 2**q < N : q += 1
+
+#     work = qvm.qAlloc()
+#     mult = qvm.qAlloc_many(q)
+#     mult_ancilla = qvm.qAlloc_many(q)
+#     mod_ancilla = qvm.qAlloc_many(2)
+
+#     prog = QProg()
+#     prog << X(mult[0])
+
+#     aa = a
+#     for i in range(len(work)) :
+#         prog << U(mult, mult_ancilla, mod_ancilla, aa, N, work[i])
+#         aa = aa ** 2 % N
+
+#     prog << QFT(work).dagger()
+
+#     result = prob_run_list(prog, work, -1)
+#     destroy_quantum_machine(qvm)
+#     return result
+
+# import matplotlib.pyplot as plt
+
+# if __name__ == '__main__' :
+#     qvm = init_quantum_machine(QMachineType.CPU)
+
+#     qbit = qvm.qAlloc()
+#     cbit = qvm.cAlloc()
+#     cbit2 = qvm.cAlloc()
+
+#     prog = QProg()
+#     branch_true = QProg()
+    
+#     prog << H(qbit)
+#     prog << Measure(qbit, cbit)
+#     qif = QIfProg(cbit == 0, H(qbit))
+#     prog << qif
+
+#     result = qvm.prob_run_tuple_list(prog, qbit, -1)
+#     print(result)

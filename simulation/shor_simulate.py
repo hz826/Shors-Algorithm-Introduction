@@ -1,6 +1,5 @@
 from qpf import QPF
 from simple_number_theory import *
-import random
 import math
 from fractions import Fraction
 from qpf import QPF
@@ -8,12 +7,13 @@ from qpf import QPF
 def period_finding(a, N) :
     # 周期查找算法，需要使用量子计算机才具有优势
 
-    P = QPF(a, N) # 模拟得到量子计算机返回每一个值的概率
+    q = 1
+    while 2**q < N : q += 1
+    Q = 2**(q*2)
 
     while True :
-        c = random.choices([i for i in range(len(P))], weights=P)[0] # 按概率得到一个值
-        Q = len(P)
-
+        c = QPF(a, N) # 搭建量子电路并测量
+        
         # c/Q = d/r
         f = Fraction(c,Q).limit_denominator(N) # 使用 stern brocot tree 找到分母在一定范围内时最近的一个分数
         r = f.denominator

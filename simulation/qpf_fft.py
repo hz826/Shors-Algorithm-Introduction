@@ -4,7 +4,7 @@ import numpy as np
 
 # 使用 fft 模拟量子计算机，返回测量得到每一个数的概率
 
-def qpf_fft_slow(a, N, Q=None) :
+def QPF_fft_slow_prob(a, N, Q=None) :
     if Q == None :
         Q = 1
         while Q < N : Q <<= 1
@@ -28,7 +28,7 @@ def qpf_fft_slow(a, N, Q=None) :
     return P
 
 
-def qpf_fft_fast(a, N, Q=None) :
+def QPF_fft_fast_prob(a, N, Q=None) :
     if Q == None :
         Q = 1
         while Q < N**2 : Q <<= 1

@@ -15,8 +15,8 @@ import matplotlib.pyplot as plt
 # # print(A.round(2))
 # print(C.round(2))
 
-n = 128
-r = 5
+n = 64
+r = 6
 
 index = [i for i in range(n)]
 A = np.array([1 if i%r==1 else 0 for i in range(n)])
