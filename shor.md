@@ -94,17 +94,17 @@ case3: $N=p$，这种情况我们可以通过素性测试检测出来
 
 
 
-定义 $f_2(n) = \max_k \{2^k \mid n\}$ 表示 $n$ 中因子 $2$ 的次数，
+定义 $v_2(n) = \max_k \{2^k \mid n\}$ 表示 $n$ 中因子 $2$ 的次数，
 $$
 \begin{aligned}
 a^{\frac{r}{2}} \equiv -1 \pmod N &\iff \forall i,\ a^{\frac{r}{2}} \equiv -1 \pmod {p_i^{\alpha_i}}\\
 &\iff \forall i,\ 2\nmid r/r_i\\
-&\iff \forall i,j,\ f_2(r_i)=f_2(r_j)
+&\iff \forall i,j,\ v_2(r_i)=v_2(r_j)
 \end{aligned}
 $$
 
 
-综上所述，对于随机的 $a$ ，不能通过 $a$ 找到 $N$ 的非平凡因子当且仅当 $\forall i,j,\ f_2(r_i) = f_2(r_j)$
+综上所述，对于随机的 $a$ ，不能通过 $a$ 找到 $N$ 的非平凡因子当且仅当 $\forall i,j,\ v_2(r_i) = v_2(r_j)$
 
 
 
@@ -114,19 +114,19 @@ $$
 $$
 r_i = \mathrm{ord}(g^x) = \min_{r>0} \{\varphi(p_i^{\alpha_i}) \mid rx\} = \frac{\varphi(p_i^{\alpha_i})}{\gcd(\varphi(p_i^{\alpha_i}),x)}\\
 \\
-f_2(r_i) = \max(0, f_2(\varphi(p_i^{\alpha_i})) - f_2(x))
+v_2(r_i) = \max(0, v_2(\varphi(p_i^{\alpha_i})) - v_2(x))
 $$
 
 
 进一步的，对于非特殊情况的 $N$ ，和随机的与 $N$ 互质的 $a$，
 $$
 \begin{aligned}
-P(f_2(r_i) = t) &= \begin{cases}
-\frac{1}{2^{f_2(\varphi(n))}} & t=0\\
-\frac{1}{2^{f_2(\varphi(n))-t+1}} & 1\le t\le f_2(\varphi(n))
+P(v_2(r_i) = t) &= \begin{cases}
+\frac{1}{2^{v_2(\varphi(n))}} & t=0\\
+\frac{1}{2^{v_2(\varphi(n))-t+1}} & 1\le t\le v_2(\varphi(n))
 \end{cases}\\
 \\
-P(\text{fail}) &= P(2\nmid r \or a^{\frac{r}{2}} \equiv -1\!\! \pmod N) = \sum_t \prod_i P(f_2(r_i) = t) \le \frac{1}{2}
+P(\text{fail}) &= P(2\nmid r \or a^{\frac{r}{2}} \equiv -1\!\! \pmod N) = \sum_t \prod_i P(v_2(r_i) = t) \le \frac{1}{2}
 \end{aligned}
 $$
 
@@ -230,9 +230,12 @@ $d \in 0\dots r-1$ ，而计算到每一个 $d$ 的概率大于 $0.4 \frac{1}{r}
 
 ## 参考
 
-Shor, P.W. "Algorithms for quantum computation: discrete logarithms and factoring"
 
-Stephane Beauregard "Circuit for Shor's algorithm using 2n+3 qubits"
+[Shor, P.W. "Algorithms for quantum computation: discrete logarithms and factoring"]()
+
+[Stephane Beauregard "Circuit for Shor's algorithm using 2n+3 qubits"]([[quant-ph/0205095\] Circuit for Shor's algorithm using 2n+3 qubits (arxiv.org)](https://arxiv.org/abs/quant-ph/0205095))
+
+[S. Parker, M.B. Plenio "fficient factorization with a single pure qubit and logN mixed qubits"](https://arxiv.org/abs/quant-ph/0001066v3)
 
 Eric R. Johnston, Nic Harrigan, Mercedes Gimeno-Segovia "Programming Quantum Computers_ Essential Algorithms and Code Samples"
 
