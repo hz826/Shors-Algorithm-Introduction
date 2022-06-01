@@ -236,9 +236,9 @@ $d \in 0\dots r-1$ ，而计算到每一个 $d$ 的概率大于 $0.4 \frac{1}{r}
 ## 参考
 
 
-[Shor, P.W. "Algorithms for quantum computation: discrete logarithms and factoring"]()
+Shor, P.W. "Algorithms for quantum computation: discrete logarithms and factoring"
 
-[Stephane Beauregard "Circuit for Shor's algorithm using 2n+3 qubits"]([[quant-ph/0205095\] Circuit for Shor's algorithm using 2n+3 qubits (arxiv.org)](https://arxiv.org/abs/quant-ph/0205095))
+[Stephane Beauregard "Circuit for Shor's algorithm using 2n+3 qubits"](https://arxiv.org/abs/quant-ph/0205095)
 
 [S. Parker, M.B. Plenio "fficient factorization with a single pure qubit and logN mixed qubits"](https://arxiv.org/abs/quant-ph/0001066v3)
 
