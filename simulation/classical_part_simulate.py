@@ -8,12 +8,12 @@ def shor_simulate(N) :
     success = 0
     for a in range(1,N) :
         if gcd(a,N) != 1 :
-            print(a, 0, end='')
+            print(a, 0, end='\t')
             print('\t\tg', gcd(a, N))
             success += 1
         else :
             r = ord(a, N) # 在实际的 shor 算法中，这里使用量子计算机高效完成
-            print(a, r, end='')
+            print(a, r, end='\t')
             if r%2 != 0 :
                 print('\tr')
             else :
@@ -27,9 +27,12 @@ def shor_simulate(N) :
     print('Success rate =', success / (N-1))
     # 可以证明这部分的成功率 > 1/2
 
-shor_simulate(11*37)
-# shor_simulate(19*23)
+if __name__ == '__main__' :
+    shor_simulate(19*23)
+
 '''
+output = a, ord(a), status
+
 r : ERROR, r%2 == 1
 b : ERROR, b=a^(r/2) == N-1
 

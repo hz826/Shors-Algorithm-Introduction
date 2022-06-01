@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{ctex}
+\usepackage{qcircuit}
+\usepackage{graphicx}
+\usepackage{braket}
+
+\geometry{a3paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+\begin{document}
+  \Qcircuit @C=1em @R=.7em {
+    \lstick{\mathrm{0x8}\ \ket{0}} & \gate{H}   & \qw            & \qw            & \qw            & \ctrl{4}       &  \multigate{3}{QFT^\dag} & \meter\\
+    \lstick{\mathrm{0x4}\ \ket{0}} & \gate{H}   & \qw            & \qw            & \ctrl{3}       & \qw            &  \ghost{QFT^\dag}        & \meter\\
+    \lstick{\mathrm{0x2}\ \ket{0}} & \gate{H}   & \qw            & \ctrl{2}       & \qw            & \qw            &  \ghost{QFT^\dag}        & \meter\\
+    \lstick{\mathrm{0x1}\ \ket{0}} & \gate{H}   & \ctrl{1}       & \qw            & \qw            & \qw            &  \ghost{QFT^\dag}        & \meter\\
+    \lstick{\ket{1}}               & {/^n} \qw  & \gate{U_{a^1}} & \gate{U_{a^2}} & \gate{U_{a^4}} & \gate{U_{a^8}} & \qw \\
+  }
+
+  \vspace{1in}
+
+  \Qcircuit @C=1em @R=.7em {
+    \lstick{\mathrm{0x8}\ \ket{0}} & \gate{H}   & \qw            & \qw            & \qw            & \ctrl{4}       & \qswap      & \qw         & \qw      & \qw                            & \qw                            & \gate{R_{\frac \pi 8}^\dagger} & \qw      & \qw                            & \gate{R_{\frac \pi 4}^\dagger}  & \qw      & \gate{R_{\frac \pi 2}^\dagger} & \gate{H} & \meter \\
+    \lstick{\mathrm{0x4}\ \ket{0}} & \gate{H}   & \qw            & \qw            & \ctrl{3}       & \qw            & \qw \qwx    & \qswap      & \qw      & \qw                            & \gate{R_{\frac \pi 4}^\dagger} & \qw                            & \qw      & \gate{R_{\frac \pi 2}^\dagger} & \qw                             & \gate{H} & \ctrl{-1}                      & \qw      & \meter \\
+    \lstick{\mathrm{0x2}\ \ket{0}} & \gate{H}   & \qw            & \ctrl{2}       & \qw            & \qw            & \qw \qwx    & \qswap \qwx & \qw      & \gate{R_{\frac \pi 2}^\dagger} & \qw                            & \qw                            & \gate{H} & \ctrl{-1}                      & \ctrl{-2}                       & \qw      & \qw                            & \qw      & \meter \\
+    \lstick{\mathrm{0x1}\ \ket{0}} & \gate{H}   & \ctrl{1}       & \qw            & \qw            & \qw            & \qswap \qwx & \qw         & \gate{H} & \ctrl{-1}                      & \ctrl{-2}                      & \ctrl{-3}                      & \qw      & \qw                            & \qw                             & \qw      & \qw                            & \qw      & \meter \\
+    \lstick{\ket{1}}               & {/^n} \qw  & \gate{U_{a^1}} & \gate{U_{a^2}} & \gate{U_{a^4}} & \gate{U_{a^8}} & \qw \\
+  }
+
+  \vspace{1in}
+
+  \Qcircuit @C=1em @R=.7em {
+    \lstick{\mathrm{0x1}\ \ket{0}} & \gate{H}   & \qw            & \qw            & \qw            & \ctrl{4}       & \qw      & \qw                            & \qw                            & \gate{R_{\frac \pi 8}^\dagger} & \qw      & \qw                            & \gate{R_{\frac \pi 4}^\dagger}  & \qw      & \gate{R_{\frac \pi 2}^\dagger} & \gate{H} & \meter \\
+    \lstick{\mathrm{0x2}\ \ket{0}} & \gate{H}   & \qw            & \qw            & \ctrl{3}       & \qw            & \qw      & \qw                            & \gate{R_{\frac \pi 4}^\dagger} & \qw                            & \qw      & \gate{R_{\frac \pi 2}^\dagger} & \qw                             & \gate{H} & \ctrl{-1}                      & \qw      & \meter \\
+    \lstick{\mathrm{0x4}\ \ket{0}} & \gate{H}   & \qw            & \ctrl{2}       & \qw            & \qw            & \qw      & \gate{R_{\frac \pi 2}^\dagger} & \qw                            & \qw                            & \gate{H} & \ctrl{-1}                      & \ctrl{-2}                       & \qw      & \qw                            & \qw      & \meter \\
+    \lstick{\mathrm{0x8}\ \ket{0}} & \gate{H}   & \ctrl{1}       & \qw            & \qw            & \qw            & \gate{H} & \ctrl{-1}                      & \ctrl{-2}                      & \ctrl{-3}                      & \qw      & \qw                            & \qw                             & \qw      & \qw                            & \qw      & \meter \\
+    \lstick{\ket{1}}               & {/^n} \qw  & \gate{U_{a^8}} & \gate{U_{a^4}} & \gate{U_{a^2}} & \gate{U_{a^1}} & \qw \\
+  }
+
+  \vspace{1in}
+
+  \Qcircuit @C=1em @R=.7em {
+    \lstick{\mathrm{0x1}\ \ket{0}} & \gate{H}   & \qw            & \qw      & \qw    & \qw            & \qw                            & \qw      & \qw    & \qw            & \qw                            & \qw                            & \qw      & \qw    & \ctrl{4}       & \gate{R_{\frac \pi 8}^\dagger} & \gate{R_{\frac \pi 4}^\dagger}  & \gate{R_{\frac \pi 2}^\dagger} & \gate{H} & \meter \\
+    \lstick{\mathrm{0x2}\ \ket{0}} & \gate{H}   & \qw            & \qw      & \qw    & \qw            & \qw                            & \qw      & \qw    & \ctrl{3}       & \gate{R_{\frac \pi 4}^\dagger} & \gate{R_{\frac \pi 2}^\dagger} & \gate{H} & \meter & \qw            & \qw                            & \qw                             & \ctrl{-1}                      & \qw      & \qw \\
+    \lstick{\mathrm{0x4}\ \ket{0}} & \gate{H}   & \qw            & \qw      & \qw    & \ctrl{2}       & \gate{R_{\frac \pi 2}^\dagger} & \gate{H} & \meter & \qw            & \qw                            & \ctrl{-1}                      & \qw      & \qw    & \qw            & \qw                            & \ctrl{-2}                       & \qw                            & \qw      & \qw \\
+    \lstick{\mathrm{0x8}\ \ket{0}} & \gate{H}   & \ctrl{1}       & \gate{H} & \meter & \qw            & \ctrl{-1}                      & \qw      & \qw    & \qw            & \ctrl{-2}                      & \qw                            & \qw      & \qw    & \qw            & \ctrl{-3}                      & \qw                             & \qw                            & \qw      & \qw \\
+    \lstick{\ket{1}}               & {/^n} \qw  & \gate{U_{a^8}} & \qw      & \qw    & \gate{U_{a^4}} & \qw                            & \qw      & \qw    & \gate{U_{a^2}} & \qw                            & \qw                            & \qw      & \qw    & \gate{U_{a^1}} & \qw                            & \qw                             & \qw                            & \qw      & \qw \\
+  }
+
+  \vspace{1in}
+
+  \Qcircuit @C=1em @R=.7em {
+    \lstick{\ket{0}} & \gate{H}   & \ctrl{1}       & \gate{H} & \meter &     & \gate{H} & \ctrl{1}       & \gate{R} & \gate{H} & \meter &     & \gate{H} & \ctrl{1}       & \gate{R} & \gate{H} & \meter &     & \gate{H} & \ctrl{1}       & \gate{R} & \gate{H} & \meter \\
+    \lstick{\ket{1}} & {/^n} \qw  & \gate{U_{a^8}} & \qw      & \qw    & \qw & \qw      & \gate{U_{a^4}} & \qw      &\qw       & \qw    & \qw & \qw      & \gate{U_{a^2}} & \qw      &\qw       & \qw    & \qw & \qw      & \gate{U_{a^1}} & \qw      &\qw       & \qw    \\
+  }
+\end{document}

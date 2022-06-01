@@ -57,6 +57,7 @@ $$
 
 
 
+
 首先，$b^2 \equiv 1 \pmod N \ \Longrightarrow\ b^2 \equiv 1 \pmod {p_i^{\alpha_i}}$ ，
 
 因为 $(\Z/p_i^{\alpha_i}\Z)^\times$ 是循环群，所以若 $b^2 \equiv 1 \pmod {p_i^{\alpha_i}}$，可证明 $b \equiv \pm 1\pmod {p_i^{\alpha_i}}$ 
@@ -90,6 +91,8 @@ case3: $N=p$，这种情况我们可以通过素性测试检测出来
 
 继续考虑模 $N$ 乘法群 $(\Z/N\Z)^\times$，
 
+
+
 定义 $r=\mathrm{ord}_N(a),\ r_i = \mathrm{ord}_{p_i^{\alpha_i}}(a)$ ，有 $r = \mathrm{lcm}(r_1,r_2,\dots,r_m)$ ，$2\nmid r \iff \forall i,\ 2\nmid r_i$
 
 
@@ -104,7 +107,9 @@ a^{\frac{r}{2}} \equiv -1 \pmod N &\iff \forall i,\ a^{\frac{r}{2}} \equiv -1 \p
 $$
 
 
-综上所述，对于随机的 $a$ ，不能通过 $a$ 找到 $N$ 的非平凡因子当且仅当 $\forall i,j,\ v_2(r_i) = v_2(r_j)$
+对于随机的 $a$ ，不能通过 $a$ 找到 $N$ 的非平凡因子当且仅当 $\forall i,j,\ v_2(r_i) = v_2(r_j)$
+
+
 
 
 

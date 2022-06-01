@@ -69,7 +69,7 @@ class Test(Scene) :
                 y_range=[0, max(V), 1],
                 y_length = 3.5,
                 x_length = 5,
-                bar_colors = ['#003f5c'],
+                bar_colors = ['#df8d53'],
                 bar_names = [str(i) if i%10==0 else '' for i in range(Q)],
                 bar_fill_opacity = 0.9,
                 x_axis_config = {
@@ -118,4 +118,4 @@ class Test(Scene) :
 
 import os
 if __name__ == '__main__' :
-    os.system('manim -pql myscene/scene2.py Test')
+    os.system('manim -pqh myscene/scene2.py Test')

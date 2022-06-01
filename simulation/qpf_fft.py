@@ -2,7 +2,7 @@ from simple_number_theory import *
 from scipy.fft import fft
 import numpy as np
 
-# 使用 fft 模拟量子计算机，返回测量得到每一个数的概率
+# 使用 fft 模拟量子计算机允许结果，返回测量得到每一个数的概率
 
 def QPF_fft_slow_prob(a, N, Q=None) :
     if Q == None :

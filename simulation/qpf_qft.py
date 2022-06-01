@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 
+# 使用 pyqpanda 搭建量子电路模拟量子周期查找算法
+
 def CCR(c1: Qubit, c2: Qubit, tar: Qubit, theta: float) -> QCircuit :
     # 双受控相移门
     circ = QCircuit()
@@ -168,6 +170,7 @@ def QPF_qft_slow_prob(a: int, N: int) :
 
 def QPF_qft_fast(a: int, N: int, times: int) : 
     # 使用 2n+3 个量子比特的量子周期查找算法
+    # 由于使用的 QIF, 无法获得概率分布
     qvm = init_quantum_machine(QMachineType.CPU)
 
     q = 1
@@ -208,7 +211,7 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__' :
     a = 2
     N = 7
-    times = 2048
+    times = 2048 # 这可能需要允许比较长的时间（10分钟或更多）
 
     result = QPF_qft_fast(a, N, times)
     P = [0 for i in range(64)]

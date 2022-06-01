@@ -5,6 +5,7 @@ import random
 from fractions import Fraction
 from qpf import QPF
 
+# 完整模拟 shor 算法
 # 'qpf_fft_slow', 'qpf_fft_fast', 'qpf_qft_slow', 'qpf_qft_fast' 之一
 # 作用分别是：使用fft模拟、使用fft模拟化简后的表达式、使用 pyqpanda 模拟 4n+2 qubits、使用 pyqpanda 模拟 2n+3 qubits
 QPF_mode = 'qpf_fft_fast'
@@ -71,7 +72,7 @@ def shor(N) :
 
 
 def shor_test(N) :
-    # 传入 N ，测试 shor 算法的正确性
+    # 传入 N ，测试 shor 算法的正确性，错误则退出程序
     if N <= 1 or isprime(N) :
         return
 
@@ -87,7 +88,7 @@ def shor_test(N) :
 
 
 if __name__ == '__main__' :
-    QPF_mode = 'qpf_qft_fast'
+    QPF_mode = 'qpf_qft_fast' # 现在在使用 pyqpanda 模拟量子计算机！
     for i in range(20) :
         shor_test(899)
 

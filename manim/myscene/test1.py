@@ -20,7 +20,6 @@ class Test(Scene) :
             # PI/2  : r'$\pi/2$',
             PI    : r'$\pi$',
         })
-        self.add(axes)
 
         def f(x, m) :
             y = m**2 if sin(x/2) == 0 else sin(m*x/2)**2/sin(x/2)**2
@@ -28,6 +27,7 @@ class Test(Scene) :
         
         graphs = [(m, axes.plot(lambda x : f(x,m), x_range=[-PI, PI, 2*PI / 1000])) for m in [4,8,12,16]]
 
+        self.add(axes)
         for (m,graph) in graphs :
             self.play(Create(graph), run_time=2)
             self.play(FadeOut(graph), run_time=0.3)
