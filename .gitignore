@@ -1,4 +1,8 @@
 reference/
+video/
 manim/myscene/__pycache__/
 */__pycache__
 */media
+presentation/qcircuit/*.sty
+presentation/table/*.dtx
+presentation/table/*.ins
