@@ -3,12 +3,11 @@ from simple_number_theory import *
 import math
 import random
 from fractions import Fraction
-from qpf import QPF
 
 # 完整模拟 shor 算法
 # 'qpf_fft_slow', 'qpf_fft_fast', 'qpf_qft_slow', 'qpf_qft_fast' 之一
 # 作用分别是：使用fft模拟、使用fft模拟化简后的表达式、使用 pyqpanda 模拟 4n+2 qubits、使用 pyqpanda 模拟 2n+3 qubits
-QPF_mode = 'qpf_fft_fast'
+# QPF_mode = 'qpf_fft_fast'
 
 def period_finding(a, N) :
     # 周期查找算法，需要使用量子计算机才具有优势
@@ -18,16 +17,16 @@ def period_finding(a, N) :
     Q = 2**(q*2)
 
     while True :
-        c = QPF(a, N) # 搭建量子电路并测量
+        c = QPF(a, N, mode=QPF_mode) # 搭建量子电路并测量
         
         # c/Q = d/r
         f = Fraction(c,Q).limit_denominator(N) # 使用 stern brocot tree 找到分母在一定范围内时最近的一个分数
         r = f.denominator
-        print('        ', Fraction(c,Q), ' -> ', f)
-        # 可以证明 f 的分母是 r 或者 r 的约数，如果是 r 的约数则需要重新进行此步骤
+        print('        ', str(c) + '/' + str(Q), ' -> ', f)
+        # 可以证明有超过40%的概率 f 的分母是 r 或者 r 的约数，如果是 r 的约数则需要重新进行此步骤
 
         if qpow(a, r, N) == 1 :
-            while r%2 == 0 and qpow(a, r//2, N) == 1 : # 可以证明，只要找到 r 的倍数即可
+            while r%2 == 0 and qpow(a, r//2, N) == 1 : # 有极小概率得到 r 的倍数，可以通过这种方式处理
                 r //= 2
             return r
 
@@ -58,6 +57,8 @@ def shor(N) :
         
         r = period_finding(a, N)
         print('  QPF   r =', r)
+        # print('  REAL  r =', ord(a,N))
+
         if r%2 == 1 :
             print('  FAIL  r%2==1\n')
             continue
@@ -80,21 +81,20 @@ def shor_test(N) :
     print('BEGIN  N =', N)
 
     d = shor(N)
+    print('END   FOUND', [d, N//d], end='\n\n')
+
     if (d <= 1 or d >= N or N % d != 0) : 
         print('!!! ERROR !!!')
         exit(1)
-    
-    print('END   FOUND', [d, N//d], end='\n\n')
-
 
 if __name__ == '__main__' :
     QPF_mode = 'qpf_qft_fast' # 现在在使用 pyqpanda 模拟量子计算机！
-    for i in range(20) :
-        shor_test(899)
+    for i in range(10) :
+        shor_test(15)
 
     # QPF_mode = 'qpf_fft_fast'
     # for i in range(20) :
-    #     shor_test(143)
+    #     shor_test(10403)
 
     # for i in range(1000,1100) :
     #     if i%2 == 0 : continue

@@ -1,4 +1,4 @@
-from qpf_fft import QPF_fft_slow_prob, QPF_fft_fast_prob
+from qpf_fft import QPF_fft_slow_prob, QPF_fft_fast_prob, QPF_fft_fast
 from qpf_qft import QPF_qft_slow_prob, QPF_qft_fast
 import matplotlib.pyplot as plt
 import random
@@ -20,19 +20,23 @@ def QPF(a, N, mode='qpf_fft_fast') :
     # 使用不同算法模拟量子周期查找，返回测量值
     global last_query  # (a, N, mode)
     global last_result # 缓存概率分布，加快计算
+
+    print('  QPF mode =', mode)
     
-    if mode in ['qpf_fft_slow', 'qpf_fft_fast', 'qpf_qft_slow'] :
+    if mode in ['qpf_fft_slow', 'qpf_qft_slow'] :
         if (a, N, mode) != last_query :
             last_query = (a, N, mode)
             last_result = QPF_prob(a, N, mode)
         return random.choices([i for i in range(len(last_result))], weights=last_result)[0]
     elif mode == 'qpf_qft_fast' : 
-        return QPF_qft_fast(a, N, 1).keys()[0] # 2n+3 qubits
+        return int(list(QPF_qft_fast(a, N, 1).keys())[0],2) # 2n+3 qubits
+    elif mode == 'qpf_fft_fast' :
+        return QPF_fft_fast(a, N, 1)[0] # O(N), 只模拟峰值附近
 
 
 if __name__ == '__main__' :
-    a = 2
-    N = 13
+    a = 3
+    N = 7
 
     plt.subplot(121)
     P = QPF_prob(a, N, mode='qpf_fft_fast')

@@ -209,12 +209,18 @@ def QPF_qft_fast(a: int, N: int, times: int) :
 
 import matplotlib.pyplot as plt
 if __name__ == '__main__' :
-    a = 2
+    # a = 11
+    # N = 15
+    a = 3
     N = 7
-    times = 2048 # 这可能需要允许比较长的时间（10分钟或更多）
+    times = 2048 # 这可能需要运行比较长的时间（10分钟或更多）
+    Q = 1
+    while Q < N :
+        Q <<= 1
+    Q = Q ** 2
 
     result = QPF_qft_fast(a, N, times)
-    P = [0 for i in range(64)]
+    P = [0 for i in range(Q)]
     for (k,v) in result.items() :
         P[int(k,2)] += v / times
     plt.bar([i for i in range(len(P))], P)
