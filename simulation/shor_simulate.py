@@ -90,12 +90,8 @@ def shor_test(N) :
 if __name__ == '__main__' :
     QPF_mode = 'qpf_qft_fast' # 现在在使用 pyqpanda 模拟量子计算机！
     for i in range(10) :
-        shor_test(15)
+        shor_test(35)
 
     # QPF_mode = 'qpf_fft_fast'
     # for i in range(20) :
     #     shor_test(10403)
-
-    # for i in range(1000,1100) :
-    #     if i%2 == 0 : continue
-    #     shor_test(i)

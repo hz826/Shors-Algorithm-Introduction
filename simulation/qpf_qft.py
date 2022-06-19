@@ -191,9 +191,9 @@ def QPF_qft_fast(a: int, N: int, times: int) :
 
     for i in range(q*2) :
         prog << H(work)
-        prog << U(mult, mult_ancilla, mod_ancilla, A[-i], N, work)
+        prog << U(mult, mult_ancilla, mod_ancilla, A[q*2-i-1], N, work)
         
-        ### 这里是一个 QFT
+        ### 这里是一个 IQFT
         for j in range(i) :
             prog << QIfProg(cbits[j], U1(work, np.pi / 2**(i-j)).dagger()) # 改为使用传统比特控制旋转
         prog << H(work)
@@ -208,12 +208,18 @@ def QPF_qft_fast(a: int, N: int, times: int) :
 
 
 import matplotlib.pyplot as plt
+
+# if __name__ == '__main__' :
+#     a = 3
+#     N = 7
+#     P = QPF_qft_slow_prob(a, N)
+#     plt.bar([i for i in range(len(P))], P)
+#     plt.show()
+
 if __name__ == '__main__' :
-    # a = 11
-    # N = 15
     a = 3
     N = 7
-    times = 2048 # 这可能需要运行比较长的时间（10分钟或更多）
+    times = 4096 # 这可能需要运行比较长的时间（10分钟或更多）
     Q = 1
     while Q < N :
         Q <<= 1

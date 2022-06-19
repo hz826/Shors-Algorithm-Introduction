@@ -21,7 +21,7 @@ def QPF(a, N, mode='qpf_fft_fast') :
     global last_query  # (a, N, mode)
     global last_result # 缓存概率分布，加快计算
 
-    print('  QPF mode =', mode)
+    # print('  QPF mode =', mode)
     
     if mode in ['qpf_fft_slow', 'qpf_qft_slow'] :
         if (a, N, mode) != last_query :
